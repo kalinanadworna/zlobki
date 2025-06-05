@@ -22,7 +22,6 @@ class Nursery:
         self.workers = sum(pracownicy_list)
         self.children = sum(dzieci_list)
         self.coordinates = self.coordinates()
-        self.marker = map_widget.set_marker(self.coordinates[0], self.coordinates[1])
 
 pracownicy_list=[]
 class Worker:
@@ -32,7 +31,6 @@ class Worker:
         self.location = location
         self.nursery = nursery
         self.coordinates = self.coordinates()
-        self.marker = map_widget.set_marker(self.coordinates[0], self.coordinates[1])
 
 dzieci_list=[]
 class Child:
@@ -42,7 +40,6 @@ class Child:
         self.location = location
         self.nursery = nursery
         self.coordinates = self.coordinates()
-        self.marker = map_widget.set_marker(self.coordinates[0], self.coordinates[1])
 
 # ogólna funkcja zawierająca wszystkie okna (zaczyna od pierwszego - logowanie)
 def logowanie(event=None):
@@ -93,9 +90,7 @@ def logowanie(event=None):
 
                 button_zlobki_dodaj_zlobek.config(text='Dodaj zlobek', command=dodaj_zlobek)
 
-                zlobki_list[i].marker.delete()
                 zlobki_list[i].coordinates=zlobki_list[i].coordinates()
-                zlobki_list[i].marker=map_widget.set_marker(zlobki_list[i].coordinates[0], zlobki_list[i].coordinates[1])
 
                 entry_zlobki_nazwa.delete(0, END)
                 entry_zlobki_miejsce.delete(0, END)
@@ -105,7 +100,6 @@ def logowanie(event=None):
             def usun_zlobek():
                 i = listbox_zlobki.index(ACTIVE)
 
-                zlobki_list[i].marker.delete()
                 zlobki_list.pop(i)
 
                 pokaz_wszystko_zlobek()
@@ -325,7 +319,6 @@ def logowanie(event=None):
                 i = listbox_pracownicy.index(ACTIVE)
 
                 if var.get()==1:
-                    pracownicy_list[i].marker.delete()
                     pracownicy_list.pop(i)
 
                 elif var.get()==2:
@@ -338,7 +331,6 @@ def logowanie(event=None):
                             do_usuniecia.append(object)
                     for obj in do_usuniecia:
                         pracownicy_list.remove(obj)
-                    removal_list[i].marker.delete()
                     removal_list.pop(i)
                     for object in removal_list:
                         pracownicy_list.append(object)
@@ -487,7 +479,7 @@ def logowanie(event=None):
 
             root_pracownicy.mainloop()
         
-        
+
         # okno dotyczące dzieci
         def dzieci():
 
@@ -594,7 +586,6 @@ def logowanie(event=None):
                 i = listbox_dzieci.index(ACTIVE)
 
                 if var.get()==1:
-                    dzieci_list[i].marker.delete()
                     dzieci_list.pop(i)
 
                 elif var.get()==2:
@@ -607,7 +598,6 @@ def logowanie(event=None):
                             do_usuniecia.append(object)
                     for obj in do_usuniecia:
                         dzieci_list.remove(obj)
-                    removal_list[i].marker.delete()
                     removal_list.pop(i)
                     for object in removal_list:
                         dzieci_list.append(object)
@@ -755,6 +745,284 @@ def logowanie(event=None):
             label_dzieci_zlobek_szczegoly_wartosc.grid(row=2, column=3)
 
             root_dzieci.mainloop()
+
+
+        # okno dotyczące mapy
+        def mapa():
+
+            def center_widgets_mapa(event=None):
+                window_width = root_mapa_all.winfo_width()
+                frame_height=root_mapa.winfo_height()
+                root_mapa.place(x=window_width // 2, y=frame_height/2, anchor='center')
+
+            def center_map_zlobki(lista_mapa_z:list):
+                lats=[]
+                lons=[]
+
+                for coords in lista_mapa_z:
+                    lats.append(coords[0])
+                    lons.append(coords[1])
+
+                min_lat = min(lat for lat in lats)
+                max_lat = max(lat for lat in lats)
+                min_lon = min(lon for lon in lons)
+                max_lon = max(lon for lon in lons)
+
+                center_lat = (float(min_lat) + float(max_lat)) / 2
+                center_lon = (float(min_lon) + float(max_lon)) / 2
+
+                return (center_lat, center_lon)
+
+            def extent_zoom_zlobki(lista_mapa_z:list):
+                lats=[]
+                lons=[]
+
+                for coords in lista_mapa_z:
+                    lats.append(coords[0])
+                    lons.append(coords[1])
+
+                min_lat = min(lat for lat in lats)
+                max_lat = max(lat for lat in lats)
+                min_lon = min(lon for lon in lons)
+                max_lon = max(lon for lon in lons)
+
+                extent_width=float(max_lat) - float(min_lat)
+                extent_height=float(max_lon) - float(min_lon)
+
+                extent_width_zoom=math.log(extent_width / 1155) / (-0.716)
+                extent_height_zoom=math.log(extent_height / 260) / (-0.69)
+
+                if extent_height_zoom<extent_width_zoom:
+                    return int(round(extent_height_zoom,0))
+                else:
+                    return int(round(extent_width_zoom,0))
+
+            def center_map_pracownicy(lista_mapa_p: list):
+                lats = []
+                lons = []
+
+                for coords in lista_mapa_p:
+                    lats.append(coords[0])
+                    lons.append(coords[1])
+
+                min_lat = min(lat for lat in lats)
+                max_lat = max(lat for lat in lats)
+                min_lon = min(lon for lon in lons)
+                max_lon = max(lon for lon in lons)
+
+                center_lat = (float(min_lat) + float(max_lat)) / 2
+                center_lon = (float(min_lon) + float(max_lon)) / 2
+
+                return (center_lat, center_lon)
+
+            def extent_zoom_pracownicy(lista_mapa_p: list):
+                lats = []
+                lons = []
+
+                for coords in lista_mapa_p:
+                    lats.append(coords[0])
+                    lons.append(coords[1])
+
+                min_lat = min(lat for lat in lats)
+                max_lat = max(lat for lat in lats)
+                min_lon = min(lon for lon in lons)
+                max_lon = max(lon for lon in lons)
+
+                extent_width = float(max_lat) - float(min_lat)
+                extent_height = float(max_lon) - float(min_lon)
+
+                extent_width_zoom = math.log(extent_width / 1155) / (-0.716)
+                extent_height_zoom = math.log(extent_height / 260) / (-0.69)
+
+                if extent_height_zoom < extent_width_zoom:
+                    return int(round(extent_height_zoom, 0))
+                else:
+                    return int(round(extent_width_zoom, 0))
+                
+            def center_map_dzieci(lista_mapa_d: list):
+                lats = []
+                lons = []
+
+                for coords in lista_mapa_d:
+                    lats.append(coords[0])
+                    lons.append(coords[1])
+
+                min_lat = min(lat for lat in lats)
+                max_lat = max(lat for lat in lats)
+                min_lon = min(lon for lon in lons)
+                max_lon = max(lon for lon in lons)
+
+                center_lat = (float(min_lat) + float(max_lat)) / 2
+                center_lon = (float(min_lon) + float(max_lon)) / 2
+
+                return (center_lat, center_lon)
+
+            def extent_zoom_dzieci(lista_mapa_d: list):
+                lats = []
+                lons = []
+
+                for coords in lista_mapa_d:
+                    lats.append(coords[0])
+                    lons.append(coords[1])
+
+                min_lat = min(lat for lat in lats)
+                max_lat = max(lat for lat in lats)
+                min_lon = min(lon for lon in lons)
+                max_lon = max(lon for lon in lons)
+
+                extent_width = float(max_lat) - float(min_lat)
+                extent_height = float(max_lon) - float(min_lon)
+
+                extent_width_zoom = math.log(extent_width / 1155) / (-0.716)
+                extent_height_zoom = math.log(extent_height / 260) / (-0.69)
+
+                if extent_height_zoom < extent_width_zoom:
+                    return int(round(extent_height_zoom, 0))
+                else:
+                    return int(round(extent_width_zoom, 0))
+
+            def mapa_zlobki():
+                coords_for_map=[]
+                for object in zlobki_list:
+                    zlobek=object.coordinates
+                    coords_for_map.append(zlobek)
+
+                mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
+                mapa.set_position(center_map_zlobki(coords_for_map)[0], center_map_zlobki(coords_for_map)[1])
+                mapa.set_zoom(extent_zoom_zlobki(coords_for_map))
+                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+
+                tuples_coords = []
+                for object in zlobki_list:
+                    zlobek=object.coordinates
+                    tuples_coords.append(zlobek)
+                    mapa.set_marker(zlobek[0], zlobek[1], text=f'{object.name}', font=('Arial', 10, 'bold'), text_color='black')
+
+            def mapa_pracowicy():
+                coords_for_map=[]
+                for object in pracownicy_list:
+                    zamieszkanie=object.coordinates
+                    coords_for_map.append(zamieszkanie)
+
+                mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
+                mapa.set_position(center_map_pracownicy(coords_for_map)[0], center_map_pracownicy(coords_for_map)[1])
+                mapa.set_zoom(extent_zoom_pracownicy(coords_for_map))
+                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+
+                for object in pracownicy_list:
+                    zamieszkanie=object.coordinates
+                    mapa.set_marker(zamieszkanie[0], zamieszkanie[1], text=f'{object.name} {object.surname}', font=('Arial', 8), text_color='black')
+
+            def mapa_pracowicy_ze_zlobka():
+                zlobek=entry_mapa_zlobek_prac.get()
+                chosen_list=[]
+                for object in pracownicy_list:
+                    if object.nursery==zlobek:
+                        chosen_list.append(object)
+
+                coords_for_map=[]
+                for object in chosen_list:
+                    zamieszkanie=object.coordinates
+                    coords_for_map.append(zamieszkanie)
+
+                mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
+                mapa.set_position(center_map_pracownicy(coords_for_map)[0], center_map_pracownicy(coords_for_map)[1])
+                mapa.set_zoom(extent_zoom_pracownicy(coords_for_map))
+                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+
+                for object in chosen_list:
+                    zamieszkanie=object.coordinates
+                    mapa.set_marker(zamieszkanie[0], zamieszkanie[1], text=f'{object.name} {object.surname}', font=('Arial', 8), text_color='black')
+
+            def mapa_dzieci():
+                coords_for_map=[]
+                for object in dzieci_list:
+                    zamieszkanie=object.coordinates
+                    coords_for_map.append(zamieszkanie)
+
+                mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
+                mapa.set_position(center_map_dzieci(coords_for_map)[0], center_map_dzieci(coords_for_map)[1])
+                mapa.set_zoom(extent_zoom_dzieci(coords_for_map))
+                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+
+                for object in dzieci_list:
+                    zamieszkanie=object.coordinates
+                    mapa.set_marker(zamieszkanie[0], zamieszkanie[1], text=f'{object.name} {object.surname}', font=('Arial', 8), text_color='black')
+
+            def mapa_dzieci_ze_zlobka():
+                zlobek=entry_mapa_zlobek_dziec.get()
+                chosen_list=[]
+                for object in dzieci_list:
+                    if object.nursery==zlobek:
+                        chosen_list.append(object)
+
+                coords_for_map=[]
+                for object in chosen_list:
+                    zamieszkanie=object.coordinates
+                    coords_for_map.append(zamieszkanie)
+
+                mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
+                mapa.set_position(center_map_dzieci(coords_for_map)[0], center_map_dzieci(coords_for_map)[1])
+                mapa.set_zoom(extent_zoom_dzieci(coords_for_map))
+                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+
+                for object in chosen_list:
+                    zamieszkanie=object.coordinates
+                    mapa.set_marker(zamieszkanie[0], zamieszkanie[1], text=f'{object.name} {object.surname}', font=('Arial', 8), text_color='black')
+
+            root_mapa_all = Toplevel(root_choice)
+            root_mapa_all.title('Utrudnienia drogowe')
+            szer = 800
+            wys = 600
+            root_mapa_all.geometry(f'{szer}x{wys}')
+            root_mapa_all.bind('<Configure>', center_widgets_mapa)
+
+            root_mapa=Frame(root_mapa_all)
+            root_mapa.grid(row=0, column=0)
+
+            ramka_mapa = Frame(root_mapa)
+            ramka_mapa.grid(row=0, column=3, columnspan=2)
+
+            # ---------------------------------------
+            # ramka mapa
+            # ---------------------------------------
+            label_mapa_start = Label(ramka_mapa, text='Portal mapowy', font=('Arial', 12, 'bold'))
+            label_mapa_wybor = Label(ramka_mapa, text='Wybierz mapę do wyświetlenia:')
+            label_mapa_zlobki = Label(ramka_mapa, text='Mapa wszystkich żłobków')
+            button_mapa_zlobki = Button(ramka_mapa, text='Wyświetl', command=mapa_zlobki)
+            label_mapa_pracownicy = Label(ramka_mapa, text='Mapa wszystkich pracowników')
+            button_mapa_pracownicy = Button(ramka_mapa, text='Wyświetl', command=mapa_pracowicy)
+            label_mapa_dzieci = Label(ramka_mapa, text='Mapa wszystkich dzieci')
+            button_mapa_dzieci = Button(ramka_mapa, text='Wyświetl', command=mapa_dzieci)
+            label_mapa_pracownicy_zlobka = Label(ramka_mapa, text='Mapa pracowników wybranego żłobka')
+            label_mapa_zlobek_prac = Label(ramka_mapa, text='Start')
+            entry_mapa_zlobek_prac = Entry(ramka_mapa)
+            button_mapa_pracownicy_zlobka = Button(ramka_mapa, text='Wyświetl', command=mapa_pracowicy_ze_zlobka)
+            label_mapa_dzieci_zlobka = Label(ramka_mapa, text='Mapa dzieci wybranego żłobka')
+            label_mapa_zlobek_dziec = Label(ramka_mapa, text='Start')
+            entry_mapa_zlobek_dziec = Entry(ramka_mapa)
+            button_mapa_dzieci_zlobka = Button(ramka_mapa, text='Wyświetl', command=mapa_dzieci_ze_zlobka)
+
+            label_mapa_start.grid(row=0, column=0, columnspan=3, pady=(10, 0))
+            label_mapa_wybor.grid(row=1, column=0, columnspan=3)
+            label_mapa_zlobki.grid(row=2, column=0, sticky=W)
+            button_mapa_zlobki.grid(row=2, column=1, sticky=E)
+            label_mapa_pracownicy.grid(row=3, column=0, sticky=W)
+            button_mapa_pracownicy.grid(row=3, column=1, sticky=E)
+
+            label_mapa_dzieci.grid(row=4, column=0, sticky=W)
+            button_mapa_dzieci.grid(row=4, column=1, sticky=E)
+
+            label_mapa_pracownicy_zlobka.grid(row=5, column=0, sticky=W)
+            label_mapa_zlobek_prac.grid(row=6, column=0, sticky=W)
+            entry_mapa_zlobek_prac.grid(row=6, column=0, padx=50, sticky=W)
+            button_mapa_pracownicy_zlobka.grid(row=6, column=1, rowspan=2, sticky=E)
+            label_mapa_dzieci_zlobka.grid(row=7, column=0, sticky=W)
+            label_mapa_zlobek_dziec.grid(row=8, column=0, sticky=W)
+            entry_mapa_zlobek_dziec.grid(row=8, column=0, padx=50, sticky=W)
+            button_mapa_dzieci_zlobka.grid(row=8, column=1, rowspan=2, sticky=E)
+
+            root_mapa.mainloop()
 
 
         def center_widgets_choice(event=None):
