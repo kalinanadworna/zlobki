@@ -487,7 +487,274 @@ def logowanie(event=None):
 
             root_pracownicy.mainloop()
         
+        
+        # okno dotyczące dzieci
+        def dzieci():
 
+            def center_widgets_dzieci(event=None):
+                window_width = root_dzieci_all.winfo_width()
+                frame_height=root_dzieci.winfo_height()
+                root_dzieci.place(x=window_width // 2, y=frame_height/2, anchor='center')
+
+            def pokaz_wszystko_dzieci():
+                radiobutton_all.select()
+                listbox_dzieci.delete(0, END)
+                for idx, object in enumerate(dzieci_list):
+                    listbox_dzieci.insert(idx, f'Dziecko {object.name} {object.surname}')
+
+            def pokaz_zaznaczone_dzieci():
+                if var.get()==1:
+                    pokaz_wszystko_dzieci()
+                elif var.get()==2:
+                    zlobek=entry_start_zlobek.get()
+                    listbox_dzieci.delete(0, END)
+                    for idx, object in enumerate(dzieci_list):
+                        if object.nursery==zlobek:
+                            listbox_dzieci.insert(idx, f'Dziecko {object.name} {object.surname}')
+                        else:
+                            pass
+
+            def dodaj_dziecko():
+                imie=entry_dzieci_imie.get()
+                nazwisko=entry_dzieci_nazwisko.get()
+                zamieszkanie=entry_dzieci_zamieszkanie.get()
+                zlobek=entry_dzieci_zlobek.get()
+
+                dzieci_list.append(Child(name=imie, surname=nazwisko, location=zamieszkanie, nursery=zlobek))
+
+                entry_dzieci_imie.delete(0, END)
+                entry_dzieci_nazwisko.delete(0, END)
+                entry_dzieci_zamieszkanie.delete(0, END)
+                entry_dzieci_zlobek.delete(0, END)
+
+                pokaz_zaznaczone_dzieci()
+
+            def edytuj_dziecko():
+                global lista_dziec
+                if var.get()==1:
+                    lista_dziec=dzieci_list
+
+                elif var.get()==2:
+                    zlobek=entry_start_zlobek.get()
+                    lista_dziec=[]
+                    do_usuniecia = []
+                    for object in dzieci_list:
+                        if object.nursery == zlobek:
+                            lista_dziec.append(object)
+                            do_usuniecia.append(object)
+                    for obj in do_usuniecia:
+                        dzieci_list.remove(obj)
+
+                i=listbox_dzieci.index(ACTIVE)
+
+                entry_dzieci_imie.delete(0, END)
+                entry_dzieci_nazwisko.delete(0, END)
+                entry_dzieci_zamieszkanie.delete(0, END)
+                entry_dzieci_zlobek.delete(0, END)
+
+                entry_dzieci_imie.insert(0, lista_dziec[i].name)
+                entry_dzieci_nazwisko.insert(0, lista_dziec[i].surname)
+                entry_dzieci_zamieszkanie.insert(0, lista_dziec[i].location)
+                entry_dzieci_zlobek.insert(0, lista_dziec[i].nursery)
+
+                button_dzieci_dodaj_dziecko.config(text='Zapisz zmiany', command=lambda: aktualizuj_dziecko(i))
+
+            def aktualizuj_dziecko(i):
+                global dzieci_list
+                imie=entry_dzieci_imie.get()
+                nazwisko=entry_dzieci_nazwisko.get()
+                zamieszkanie=entry_dzieci_zamieszkanie.get()
+                zlobek=entry_dzieci_zlobek.get()
+
+                if var.get() == 1:
+                    lista_dziec[i].name=imie
+                    lista_dziec[i].surname=nazwisko
+                    lista_dziec[i].location=zamieszkanie
+                    lista_dziec[i].nursery=zlobek
+                    dzieci_list=lista_dziec
+
+                elif var.get()==2:
+                    lista_dziec[i].name=imie
+                    lista_dziec[i].surname=nazwisko
+                    lista_dziec[i].location=zamieszkanie
+                    lista_dziec[i].nursery=zlobek
+                    for object in lista_dziec:
+                        dzieci_list.append(object)
+
+                button_dzieci_dodaj_dziecko.config(text='Dodaj dziecko', command=dodaj_dziecko)
+
+                entry_dzieci_imie.delete(0, END)
+                entry_dzieci_nazwisko.delete(0, END)
+                entry_dzieci_zamieszkanie.delete(0, END)
+                entry_dzieci_zlobek.delete(0, END)
+
+                pokaz_zaznaczone_dzieci()
+
+            def usun_dziecko():
+                i = listbox_dzieci.index(ACTIVE)
+
+                if var.get()==1:
+                    dzieci_list[i].marker.delete()
+                    dzieci_list.pop(i)
+
+                elif var.get()==2:
+                    zlobek=entry_start_zlobek.get()
+                    removal_list=[]
+                    do_usuniecia = []
+                    for object in dzieci_list[:]:
+                        if object.nursery == zlobek:
+                            removal_list.append(object)
+                            do_usuniecia.append(object)
+                    for obj in do_usuniecia:
+                        dzieci_list.remove(obj)
+                    removal_list[i].marker.delete()
+                    removal_list.pop(i)
+                    for object in removal_list:
+                        dzieci_list.append(object)
+
+                pokaz_zaznaczone_dzieci()
+
+            def pokaz_dziecko():
+                if var.get()==1:
+                    imie=dzieci_list[i].name
+                    nazwisko=dzieci_list[i].surname
+                    zamieszkanie=dzieci_list[i].location
+                    zlobek=dzieci_list[i].nursery
+
+                elif var.get()==2:
+                    zlobek=entry_start_zlobek.get()
+                    show_list=[]
+                    do_usuniecia = []
+                    for object in dzieci_list[:]:
+                        if object.nursery == zlobek:
+                            show_list.append(object)
+                            do_usuniecia.append(object)
+                    for obj in do_usuniecia:
+                        dzieci_list.remove(obj)
+                    imie=show_list[i].name
+                    nazwisko=show_list[i].surname
+                    zamieszkanie=show_list[i].location
+                    zlobek=show_list[i].nursery
+
+                i = listbox_dzieci.index(ACTIVE)
+
+                label_dzieci_imie_szczegoly_wartosc.config(text=imie)
+                label_dzieci_nazwisko_szczegoly_wartosc.config(text=nazwisko)
+                label_dzieci_zamieszkanie_szczegoly_wartosc.config(text=zamieszkanie)
+                label_dzieci_zlobek_szczegoly_wartosc.config(text=zlobek)
+
+            root_dzieci_all = Toplevel(root_choice)
+            root_dzieci_all.title('System żłobków')
+            szer = 690
+            wys = 490
+            root_dzieci_all.geometry(f'{szer}x{wys}')
+            root_dzieci_all.bind('<Configure>', center_widgets_dzieci)
+
+            root_dzieci=Frame(root_dzieci_all)
+            root_dzieci.grid(row=0, column=0)
+
+            ramka_dzieci_start = Frame(root_dzieci)
+            ramka_dzieci_lista = Frame(root_dzieci)
+            ramka_dzieci_formularz = Frame(root_dzieci)
+            ramka_dzieci_szczegoly = Frame(root_dzieci)
+
+            ramka_dzieci_start.grid(row=0, column=0, columnspan=2)
+            ramka_dzieci_lista.grid(row=1, column=0)
+            ramka_dzieci_formularz.grid(row=1, column=1)
+            ramka_dzieci_szczegoly.grid(row=2, column=0, columnspan=2)
+
+            # ---------------------------------------
+            # ramka dzieci_start
+            # ---------------------------------------
+            label_dzieci_lista = Label(ramka_dzieci_start, text='Lista dzieci w żłobkach', font=('Arial', 12, 'bold'))
+            button_dzieci_pokaz_liste = Button(ramka_dzieci_start, text='Pokaż wszystko', command=pokaz_wszystko_dzieci)
+            label_dzieci_wybor = Label(ramka_dzieci_start, text='Wybierz formułę wyświetlania dzieci')
+            var = IntVar()
+            radiobutton_all = Radiobutton(ramka_dzieci_start, text='Wszystkie dzieci', variable=var, value=1)
+            radiobutton_some = Radiobutton(ramka_dzieci_start, text='Dzieci z danego żłobka (nazwa)', variable=var, value=2)
+            entry_start_zlobek = Entry(ramka_dzieci_start)
+            button_dzieci_pokaz_wybrane = Button(ramka_dzieci_start, text='Pokaż zaznaczone', command=pokaz_zaznaczone_dzieci)
+
+            label_dzieci_lista.grid(row=0, column=0, columnspan=3, padx=(szer / 2 - label_dzieci_lista.winfo_reqwidth() / 2), pady=(10, 0))
+            button_dzieci_pokaz_liste.grid(row=1, column=0, columnspan=3)
+            label_dzieci_wybor.grid(row=2, column=0, pady=(10, 0), columnspan=3)
+            radiobutton_all.grid(row=3, column=0, columnspan=3)
+            radiobutton_some.grid(row=4, column=0, columnspan=3)
+            entry_start_zlobek.grid(row=5, column=0, columnspan=3, sticky=E)
+            button_dzieci_pokaz_wybrane.grid(row=6, column=0, columnspan=3)
+
+            # ---------------------------------------
+            # ramka dzieci_lista
+            # ---------------------------------------
+            listbox_dzieci = Listbox(ramka_dzieci_lista, width=50)
+            button_dzieci_pokaz_szczegoly = Button(ramka_dzieci_lista, text='Pokaż dane dziecka', command=pokaz_dziecko)
+            button_dzieci_usun = Button(ramka_dzieci_lista, text='Usuń dziecko', command=usun_dziecko)
+            button_dzieci_edytuj = Button(ramka_dzieci_lista, text='Edytuj dziecko', command=edytuj_dziecko)
+
+            listbox_dzieci.grid(row=0, column=0, columnspan=3, pady=(10, 0))
+            button_dzieci_pokaz_szczegoly.grid(row=1, column=0)
+            button_dzieci_usun.grid(row=1, column=1)
+            button_dzieci_edytuj.grid(row=1, column=2)
+
+            # ---------------------------------------
+            # ramka dzieci_formularz
+            # ---------------------------------------
+            label_dzieci_nowy_obiekt = Label(ramka_dzieci_formularz, text='Formularz edycji i dodawania:', font=('Arial', 10))
+            label_dzieci_imie = Label(ramka_dzieci_formularz, text='Imię')
+            label_dzieci_nazwisko = Label(ramka_dzieci_formularz, text='Nazwisko')
+            label_dzieci_zamieszkanie = Label(ramka_dzieci_formularz, text='Zamieszkały/a')
+            label_dzieci_zlobek = Label(ramka_dzieci_formularz, text='Prznależność')
+
+            entry_dzieci_imie = Entry(ramka_dzieci_formularz)
+            entry_dzieci_nazwisko = Entry(ramka_dzieci_formularz)
+            entry_dzieci_zamieszkanie = Entry(ramka_dzieci_formularz)
+            entry_dzieci_zlobek = Entry(ramka_dzieci_formularz)
+
+            label_dzieci_nowy_obiekt.grid(row=0, column=0, columnspan=2)
+            label_dzieci_imie.grid(row=1, column=0, sticky=W)
+            label_dzieci_nazwisko.grid(row=2, column=0, sticky=W)
+            label_dzieci_zamieszkanie.grid(row=3, column=0, sticky=W)
+            label_dzieci_zlobek.grid(row=4, column=0, sticky=W)
+
+            entry_dzieci_imie.grid(row=1, column=1, sticky=W)
+            entry_dzieci_nazwisko.grid(row=2, column=1, sticky=W)
+            entry_dzieci_zamieszkanie.grid(row=3, column=1, sticky=W)
+            entry_dzieci_zlobek.grid(row=4, column=1, sticky=W)
+
+            button_dzieci_dodaj_dziecko = Button(ramka_dzieci_formularz, text='Dodaj dziecko', command=dodaj_dziecko)
+            button_dzieci_dodaj_dziecko.grid(row=6, column=0, columnspan=2)
+
+            # ---------------------------------------
+            # ramka dzieci_szczegoly
+            # ---------------------------------------
+            label_dzieci_opis_obiektu = Label(ramka_dzieci_szczegoly, text='Szczegóły dzieci:', font=('Arial', 10))
+            label_dzieci_imie_szczegoly = Label(ramka_dzieci_szczegoly, text='Imię')
+            label_dzieci_imie_szczegoly_wartosc = Label(ramka_dzieci_szczegoly, text='...', width=20)
+
+            label_dzieci_nazwisko_szczegoly = Label(ramka_dzieci_szczegoly, text='Nazwisko')
+            label_dzieci_nazwisko_szczegoly_wartosc = Label(ramka_dzieci_szczegoly, text='...', width=20)
+
+            label_dzieci_zamieszkanie_szczegoly = Label(ramka_dzieci_szczegoly, text='Zamieszkały/a')
+            label_dzieci_zamieszkanie_szczegoly_wartosc = Label(ramka_dzieci_szczegoly, text='...', width=20)
+
+            label_dzieci_zlobek_szczegoly = Label(ramka_dzieci_szczegoly, text='Przynależność')
+            label_dzieci_zlobek_szczegoly_wartosc = Label(ramka_dzieci_szczegoly, text='...', width=20)
+
+            label_dzieci_opis_obiektu.grid(row=0, column=0, columnspan=5, pady=10)
+
+            label_dzieci_imie_szczegoly.grid(row=1, column=0)
+            label_dzieci_imie_szczegoly_wartosc.grid(row=2, column=0)
+
+            label_dzieci_nazwisko_szczegoly.grid(row=1, column=1)
+            label_dzieci_nazwisko_szczegoly_wartosc.grid(row=2, column=1)
+
+            label_dzieci_zamieszkanie_szczegoly.grid(row=1, column=2)
+            label_dzieci_zamieszkanie_szczegoly_wartosc.grid(row=2, column=2)
+
+            label_dzieci_zlobek_szczegoly.grid(row=1, column=3)
+            label_dzieci_zlobek_szczegoly_wartosc.grid(row=2, column=3)
+
+            root_dzieci.mainloop()
 
 
         def center_widgets_choice(event=None):
