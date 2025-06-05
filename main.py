@@ -4,10 +4,11 @@ from tkintermapview import TkinterMapView
 import math
 
 # Pobieranie współrzędnych dla adresu
-def coordinates(address):
+def coords_func(address):
     base_url = "https://nominatim.openstreetmap.org/search"
     params = {"q": address, "format": "json"}
-    response = rq.get(base_url, params)
+    headers = {"User-Agent": "my-app/1.0"}
+    response = rq.get(base_url, params=params, headers=headers)
     data = response.json()
     lat = data[0]["lat"]
     long = data[0]["lon"]
@@ -16,12 +17,12 @@ def coordinates(address):
 # Klasy reprezentujące żłobki, pracowników i dzieci
 zlobki_list=[]
 class Nursery:
-    def __init__(self, name, location, workers:int, children:int):
+    def __init__(self, name, location, workers:int=0, children:int=0):
         self.name = name
         self.location = location
         self.workers = sum(pracownicy_list)
         self.children = sum(dzieci_list)
-        self.coordinates = self.coordinates()
+        self.coordinates = coords_func(location)
 
 pracownicy_list=[]
 class Worker:
@@ -30,7 +31,7 @@ class Worker:
         self.surname = surname
         self.location = location
         self.nursery = nursery
-        self.coordinates = self.coordinates()
+        self.coordinates = coords_func(location)
 
 dzieci_list=[]
 class Child:
@@ -39,12 +40,12 @@ class Child:
         self.surname = surname
         self.location = location
         self.nursery = nursery
-        self.coordinates = self.coordinates()
+        self.coordinates = coords_func(location)
 
 # ogólna funkcja zawierająca wszystkie okna (zaczyna od pierwszego - logowanie)
 def logowanie(event=None):
     haslo=logowanie_entry.get()
-    if haslo=='geoinfa_rzadzi':
+    if haslo=='123':
 
         # okno dotyczące żłobków
         def zlobki():
@@ -89,8 +90,6 @@ def logowanie(event=None):
                 zlobki_list[i].location=miejsce
 
                 button_zlobki_dodaj_zlobek.config(text='Dodaj zlobek', command=dodaj_zlobek)
-
-                zlobki_list[i].coordinates=zlobki_list[i].coordinates()
 
                 entry_zlobki_nazwa.delete(0, END)
                 entry_zlobki_miejsce.delete(0, END)
@@ -338,6 +337,7 @@ def logowanie(event=None):
                 pokaz_zaznaczone_pracownicy()
 
             def pokaz_pracownika():
+                i = listbox_pracownicy.index(ACTIVE)
                 if var.get()==1:
                     imie=pracownicy_list[i].name
                     nazwisko=pracownicy_list[i].surname
@@ -358,8 +358,6 @@ def logowanie(event=None):
                     nazwisko=show_list[i].surname
                     zamieszkanie=show_list[i].location
                     zlobek=show_list[i].nursery
-
-                i = listbox_pracownicy.index(ACTIVE)
 
                 label_pracownicy_imie_szczegoly_wartosc.config(text=imie)
                 label_pracownicy_nazwisko_szczegoly_wartosc.config(text=nazwisko)
@@ -403,7 +401,7 @@ def logowanie(event=None):
             label_pracownicy_wybor.grid(row=2, column=0, pady=(10, 0), columnspan=3)
             radiobutton_all.grid(row=3, column=0, columnspan=3)
             radiobutton_some.grid(row=4, column=0, columnspan=3)
-            entry_start_zlobek.grid(row=5, column=0, columnspan=3, sticky=E)
+            entry_start_zlobek.grid(row=5, column=0, columnspan=3)
             button_pracownicy_pokaz_wybrane.grid(row=6, column=0, columnspan=3)
 
             # ---------------------------------------
@@ -605,6 +603,7 @@ def logowanie(event=None):
                 pokaz_zaznaczone_dzieci()
 
             def pokaz_dziecko():
+                i = listbox_dzieci.index(ACTIVE)
                 if var.get()==1:
                     imie=dzieci_list[i].name
                     nazwisko=dzieci_list[i].surname
@@ -625,8 +624,6 @@ def logowanie(event=None):
                     nazwisko=show_list[i].surname
                     zamieszkanie=show_list[i].location
                     zlobek=show_list[i].nursery
-
-                i = listbox_dzieci.index(ACTIVE)
 
                 label_dzieci_imie_szczegoly_wartosc.config(text=imie)
                 label_dzieci_nazwisko_szczegoly_wartosc.config(text=nazwisko)
@@ -670,7 +667,7 @@ def logowanie(event=None):
             label_dzieci_wybor.grid(row=2, column=0, pady=(10, 0), columnspan=3)
             radiobutton_all.grid(row=3, column=0, columnspan=3)
             radiobutton_some.grid(row=4, column=0, columnspan=3)
-            entry_start_zlobek.grid(row=5, column=0, columnspan=3, sticky=E)
+            entry_start_zlobek.grid(row=5, column=0, columnspan=3)
             button_dzieci_pokaz_wybrane.grid(row=6, column=0, columnspan=3)
 
             # ---------------------------------------
@@ -890,7 +887,7 @@ def logowanie(event=None):
                 mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
                 mapa.set_position(center_map_zlobki(coords_for_map)[0], center_map_zlobki(coords_for_map)[1])
                 mapa.set_zoom(extent_zoom_zlobki(coords_for_map))
-                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+                mapa.grid(row=9, column=0, columnspan=3, pady=(10,0))
 
                 tuples_coords = []
                 for object in zlobki_list:
@@ -907,7 +904,7 @@ def logowanie(event=None):
                 mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
                 mapa.set_position(center_map_pracownicy(coords_for_map)[0], center_map_pracownicy(coords_for_map)[1])
                 mapa.set_zoom(extent_zoom_pracownicy(coords_for_map))
-                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+                mapa.grid(row=9, column=0, columnspan=3, pady=(10,0))
 
                 for object in pracownicy_list:
                     zamieszkanie=object.coordinates
@@ -928,7 +925,7 @@ def logowanie(event=None):
                 mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
                 mapa.set_position(center_map_pracownicy(coords_for_map)[0], center_map_pracownicy(coords_for_map)[1])
                 mapa.set_zoom(extent_zoom_pracownicy(coords_for_map))
-                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+                mapa.grid(row=9, column=0, columnspan=3, pady=(10,0))
 
                 for object in chosen_list:
                     zamieszkanie=object.coordinates
@@ -943,7 +940,7 @@ def logowanie(event=None):
                 mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
                 mapa.set_position(center_map_dzieci(coords_for_map)[0], center_map_dzieci(coords_for_map)[1])
                 mapa.set_zoom(extent_zoom_dzieci(coords_for_map))
-                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+                mapa.grid(row=9, column=0, columnspan=3, pady=(10,0))
 
                 for object in dzieci_list:
                     zamieszkanie=object.coordinates
@@ -964,14 +961,14 @@ def logowanie(event=None):
                 mapa = TkinterMapView(ramka_mapa, width=700, height=300, corner_radius=0)
                 mapa.set_position(center_map_dzieci(coords_for_map)[0], center_map_dzieci(coords_for_map)[1])
                 mapa.set_zoom(extent_zoom_dzieci(coords_for_map))
-                mapa.grid(row=7, column=0, columnspan=3, pady=(10,0))
+                mapa.grid(row=9, column=0, columnspan=3, pady=(10,0))
 
                 for object in chosen_list:
                     zamieszkanie=object.coordinates
                     mapa.set_marker(zamieszkanie[0], zamieszkanie[1], text=f'{object.name} {object.surname}', font=('Arial', 8), text_color='black')
 
             root_mapa_all = Toplevel(root_choice)
-            root_mapa_all.title('Utrudnienia drogowe')
+            root_mapa_all.title('System żłobków')
             szer = 800
             wys = 600
             root_mapa_all.geometry(f'{szer}x{wys}')
@@ -995,11 +992,11 @@ def logowanie(event=None):
             label_mapa_dzieci = Label(ramka_mapa, text='Mapa wszystkich dzieci')
             button_mapa_dzieci = Button(ramka_mapa, text='Wyświetl', command=mapa_dzieci)
             label_mapa_pracownicy_zlobka = Label(ramka_mapa, text='Mapa pracowników wybranego żłobka')
-            label_mapa_zlobek_prac = Label(ramka_mapa, text='Start')
+            label_mapa_zlobek_prac = Label(ramka_mapa, text='Żłobek')
             entry_mapa_zlobek_prac = Entry(ramka_mapa)
             button_mapa_pracownicy_zlobka = Button(ramka_mapa, text='Wyświetl', command=mapa_pracowicy_ze_zlobka)
             label_mapa_dzieci_zlobka = Label(ramka_mapa, text='Mapa dzieci wybranego żłobka')
-            label_mapa_zlobek_dziec = Label(ramka_mapa, text='Start')
+            label_mapa_zlobek_dziec = Label(ramka_mapa, text='Żłobek')
             entry_mapa_zlobek_dziec = Entry(ramka_mapa)
             button_mapa_dzieci_zlobka = Button(ramka_mapa, text='Wyświetl', command=mapa_dzieci_ze_zlobka)
 
@@ -1009,18 +1006,16 @@ def logowanie(event=None):
             button_mapa_zlobki.grid(row=2, column=1, sticky=E)
             label_mapa_pracownicy.grid(row=3, column=0, sticky=W)
             button_mapa_pracownicy.grid(row=3, column=1, sticky=E)
-
             label_mapa_dzieci.grid(row=4, column=0, sticky=W)
             button_mapa_dzieci.grid(row=4, column=1, sticky=E)
-
             label_mapa_pracownicy_zlobka.grid(row=5, column=0, sticky=W)
             label_mapa_zlobek_prac.grid(row=6, column=0, sticky=W)
             entry_mapa_zlobek_prac.grid(row=6, column=0, padx=50, sticky=W)
-            button_mapa_pracownicy_zlobka.grid(row=6, column=1, rowspan=2, sticky=E)
+            button_mapa_pracownicy_zlobka.grid(row=6, column=1, sticky=E)
             label_mapa_dzieci_zlobka.grid(row=7, column=0, sticky=W)
             label_mapa_zlobek_dziec.grid(row=8, column=0, sticky=W)
             entry_mapa_zlobek_dziec.grid(row=8, column=0, padx=50, sticky=W)
-            button_mapa_dzieci_zlobka.grid(row=8, column=1, rowspan=2, sticky=E)
+            button_mapa_dzieci_zlobka.grid(row=8, column=1, sticky=E)
 
             root_mapa.mainloop()
 
@@ -1035,7 +1030,7 @@ def logowanie(event=None):
 
         root_choice=Toplevel()
         root_choice.title('Wybór funkcjonalności')
-        root_choice.geometry('270x110')
+        root_choice.geometry('270x130')
 
         root_choice.bind('<Configure>', center_widgets_choice)
 
