@@ -218,6 +218,278 @@ def logowanie(event=None):
 
             root_zlobki_all.mainloop()
 
+
+        # okno dotyczące pracowników
+        def pracownicy():
+
+            def center_widgets_pracownicy(event=None):
+                window_width = root_pracownicy_all.winfo_width()
+                frame_height=root_pracownicy.winfo_height()
+                root_pracownicy.place(x=window_width // 2, y=frame_height/2, anchor='center')
+
+            def pokaz_wszystko_pracownicy():
+                radiobutton_all.select()
+                listbox_pracownicy.delete(0, END)
+                for idx, object in enumerate(pracownicy_list):
+                    listbox_pracownicy.insert(idx, f'Pracownik {object.name} {object.surname}')
+
+            def pokaz_zaznaczone_pracownicy():
+                if var.get()==1:
+                    pokaz_wszystko_pracownicy()
+                elif var.get()==2:
+                    zlobek=entry_start_zlobek.get()
+                    listbox_pracownicy.delete(0, END)
+                    for idx, object in enumerate(pracownicy_list):
+                        if object.nursery==zlobek:
+                            listbox_pracownicy.insert(idx, f'Pracownik {object.name} {object.surname}')
+                        else:
+                            pass
+
+            def dodaj_pracownika():
+                imie=entry_pracownicy_imie.get()
+                nazwisko=entry_pracownicy_nazwisko.get()
+                zamieszkanie=entry_pracownicy_zamieszkanie.get()
+                zlobek=entry_pracownicy_zlobek.get()
+
+                pracownicy_list.append(Worker(name=imie, surname=nazwisko, location=zamieszkanie, nursery=zlobek))
+
+                entry_pracownicy_imie.delete(0, END)
+                entry_pracownicy_nazwisko.delete(0, END)
+                entry_pracownicy_zamieszkanie.delete(0, END)
+                entry_pracownicy_zlobek.delete(0, END)
+
+                pokaz_zaznaczone_pracownicy()
+
+            def edytuj_pracownika():
+                global lista_prac
+                if var.get()==1:
+                    lista_prac=pracownicy_list
+
+                elif var.get()==2:
+                    zlobek=entry_start_zlobek.get()
+                    lista_prac=[]
+                    do_usuniecia = []
+                    for object in pracownicy_list:
+                        if object.nursery == zlobek:
+                            lista_prac.append(object)
+                            do_usuniecia.append(object)
+                    for obj in do_usuniecia:
+                        pracownicy_list.remove(obj)
+
+                i=listbox_pracownicy.index(ACTIVE)
+
+                entry_pracownicy_imie.delete(0, END)
+                entry_pracownicy_nazwisko.delete(0, END)
+                entry_pracownicy_zamieszkanie.delete(0, END)
+                entry_pracownicy_zlobek.delete(0, END)
+
+                entry_pracownicy_imie.insert(0, lista_prac[i].name)
+                entry_pracownicy_nazwisko.insert(0, lista_prac[i].surname)
+                entry_pracownicy_zamieszkanie.insert(0, lista_prac[i].location)
+                entry_pracownicy_zlobek.insert(0, lista_prac[i].nursery)
+
+                button_pracownicy_dodaj_pracownika.config(text='Zapisz zmiany', command=lambda: aktualizuj_pracownika(i))
+
+            def aktualizuj_pracownika(i):
+                global pracownicy_list
+                imie=entry_pracownicy_imie.get()
+                nazwisko=entry_pracownicy_nazwisko.get()
+                zamieszkanie=entry_pracownicy_zamieszkanie.get()
+                zlobek=entry_pracownicy_zlobek.get()
+
+                if var.get() == 1:
+                    lista_prac[i].name=imie
+                    lista_prac[i].surname=nazwisko
+                    lista_prac[i].location=zamieszkanie
+                    lista_prac[i].nursery=zlobek
+                    pracownicy_list=lista_prac
+
+                elif var.get()==2:
+                    lista_prac[i].name=imie
+                    lista_prac[i].surname=nazwisko
+                    lista_prac[i].location=zamieszkanie
+                    lista_prac[i].nursery=zlobek
+                    for object in lista_prac:
+                        pracownicy_list.append(object)
+
+                button_pracownicy_dodaj_pracownika.config(text='Dodaj pracownika', command=dodaj_pracownika)
+
+                entry_pracownicy_imie.delete(0, END)
+                entry_pracownicy_nazwisko.delete(0, END)
+                entry_pracownicy_zamieszkanie.delete(0, END)
+                entry_pracownicy_zlobek.delete(0, END)
+
+                pokaz_zaznaczone_pracownicy()
+
+            def usun_pracownika():
+                i = listbox_pracownicy.index(ACTIVE)
+
+                if var.get()==1:
+                    pracownicy_list[i].marker.delete()
+                    pracownicy_list.pop(i)
+
+                elif var.get()==2:
+                    zlobek=entry_start_zlobek.get()
+                    removal_list=[]
+                    do_usuniecia = []
+                    for object in pracownicy_list[:]:
+                        if object.nursery == zlobek:
+                            removal_list.append(object)
+                            do_usuniecia.append(object)
+                    for obj in do_usuniecia:
+                        pracownicy_list.remove(obj)
+                    removal_list[i].marker.delete()
+                    removal_list.pop(i)
+                    for object in removal_list:
+                        pracownicy_list.append(object)
+
+                pokaz_zaznaczone_pracownicy()
+
+            def pokaz_pracownika():
+                if var.get()==1:
+                    imie=pracownicy_list[i].name
+                    nazwisko=pracownicy_list[i].surname
+                    zamieszkanie=pracownicy_list[i].location
+                    zlobek=pracownicy_list[i].nursery
+
+                elif var.get()==2:
+                    zlobek=entry_start_zlobek.get()
+                    show_list=[]
+                    do_usuniecia = []
+                    for object in pracownicy_list[:]:
+                        if object.nursery == zlobek:
+                            show_list.append(object)
+                            do_usuniecia.append(object)
+                    for obj in do_usuniecia:
+                        pracownicy_list.remove(obj)
+                    imie=show_list[i].name
+                    nazwisko=show_list[i].surname
+                    zamieszkanie=show_list[i].location
+                    zlobek=show_list[i].nursery
+
+                i = listbox_pracownicy.index(ACTIVE)
+
+                label_pracownicy_imie_szczegoly_wartosc.config(text=imie)
+                label_pracownicy_nazwisko_szczegoly_wartosc.config(text=nazwisko)
+                label_pracownicy_zamieszkanie_szczegoly_wartosc.config(text=zamieszkanie)
+                label_pracownicy_zlobek_szczegoly_wartosc.config(text=zlobek)
+
+            root_pracownicy_all = Toplevel(root_choice)
+            root_pracownicy_all.title('System żłobków')
+            szer = 690
+            wys = 490
+            root_pracownicy_all.geometry(f'{szer}x{wys}')
+            root_pracownicy_all.bind('<Configure>', center_widgets_pracownicy)
+
+            root_pracownicy=Frame(root_pracownicy_all)
+            root_pracownicy.grid(row=0, column=0)
+
+            ramka_pracownicy_start = Frame(root_pracownicy)
+            ramka_pracownicy_lista = Frame(root_pracownicy)
+            ramka_pracownicy_formularz = Frame(root_pracownicy)
+            ramka_pracownicy_szczegoly = Frame(root_pracownicy)
+
+            ramka_pracownicy_start.grid(row=0, column=0, columnspan=2)
+            ramka_pracownicy_lista.grid(row=1, column=0)
+            ramka_pracownicy_formularz.grid(row=1, column=1)
+            ramka_pracownicy_szczegoly.grid(row=2, column=0, columnspan=2)
+
+            # ---------------------------------------
+            # ramka pracownicy_start
+            # ---------------------------------------
+            label_pracownicy_lista = Label(ramka_pracownicy_start, text='Lista pracowników żłobków', font=('Arial', 12, 'bold'))
+            button_pracownicy_pokaz_liste = Button(ramka_pracownicy_start, text='Pokaż wszystko', command=pokaz_wszystko_pracownicy)
+            label_pracownicy_wybor = Label(ramka_pracownicy_start, text='Wybierz formułę wyświetlania pracowników')
+            var = IntVar()
+            radiobutton_all = Radiobutton(ramka_pracownicy_start, text='Wszyscy pracownicy', variable=var, value=1)
+            radiobutton_some = Radiobutton(ramka_pracownicy_start, text='Pracownicy z danego żłobka (nazwa)', variable=var, value=2)
+            entry_start_zlobek = Entry(ramka_pracownicy_start)
+            button_pracownicy_pokaz_wybrane = Button(ramka_pracownicy_start, text='Pokaż zaznaczone', command=pokaz_zaznaczone_pracownicy)
+
+            label_pracownicy_lista.grid(row=0, column=0, columnspan=3, padx=(szer / 2 - label_pracownicy_lista.winfo_reqwidth() / 2), pady=(10, 0))
+            button_pracownicy_pokaz_liste.grid(row=1, column=0, columnspan=3)
+            label_pracownicy_wybor.grid(row=2, column=0, pady=(10, 0), columnspan=3)
+            radiobutton_all.grid(row=3, column=0, columnspan=3)
+            radiobutton_some.grid(row=4, column=0, columnspan=3)
+            entry_start_zlobek.grid(row=5, column=0, columnspan=3, sticky=E)
+            button_pracownicy_pokaz_wybrane.grid(row=6, column=0, columnspan=3)
+
+            # ---------------------------------------
+            # ramka pracownicy_lista
+            # ---------------------------------------
+            listbox_pracownicy = Listbox(ramka_pracownicy_lista, width=50)
+            button_pracownicy_pokaz_szczegoly = Button(ramka_pracownicy_lista, text='Pokaż dane pracownika', command=pokaz_pracownika)
+            button_pracownicy_usun = Button(ramka_pracownicy_lista, text='Usuń pracownika', command=usun_pracownika)
+            button_pracownicy_edytuj = Button(ramka_pracownicy_lista, text='Edytuj pracownika', command=edytuj_pracownika)
+
+            listbox_pracownicy.grid(row=0, column=0, columnspan=3, pady=(10, 0))
+            button_pracownicy_pokaz_szczegoly.grid(row=1, column=0)
+            button_pracownicy_usun.grid(row=1, column=1)
+            button_pracownicy_edytuj.grid(row=1, column=2)
+
+            # ---------------------------------------
+            # ramka pracownicy_formularz
+            # ---------------------------------------
+            label_pracownicy_nowy_obiekt = Label(ramka_pracownicy_formularz, text='Formularz edycji i dodawania:', font=('Arial', 10))
+            label_pracownicy_imie = Label(ramka_pracownicy_formularz, text='Imię')
+            label_pracownicy_nazwisko = Label(ramka_pracownicy_formularz, text='Nazwisko')
+            label_pracownicy_zamieszkanie = Label(ramka_pracownicy_formularz, text='Zamieszkały/a')
+            label_pracownicy_zlobek = Label(ramka_pracownicy_formularz, text='Prznależność')
+
+            entry_pracownicy_imie = Entry(ramka_pracownicy_formularz)
+            entry_pracownicy_nazwisko = Entry(ramka_pracownicy_formularz)
+            entry_pracownicy_zamieszkanie = Entry(ramka_pracownicy_formularz)
+            entry_pracownicy_zlobek = Entry(ramka_pracownicy_formularz)
+
+            label_pracownicy_nowy_obiekt.grid(row=0, column=0, columnspan=2)
+            label_pracownicy_imie.grid(row=1, column=0, sticky=W)
+            label_pracownicy_nazwisko.grid(row=2, column=0, sticky=W)
+            label_pracownicy_zamieszkanie.grid(row=3, column=0, sticky=W)
+            label_pracownicy_zlobek.grid(row=4, column=0, sticky=W)
+
+            entry_pracownicy_imie.grid(row=1, column=1, sticky=W)
+            entry_pracownicy_nazwisko.grid(row=2, column=1, sticky=W)
+            entry_pracownicy_zamieszkanie.grid(row=3, column=1, sticky=W)
+            entry_pracownicy_zlobek.grid(row=4, column=1, sticky=W)
+
+            button_pracownicy_dodaj_pracownika = Button(ramka_pracownicy_formularz, text='Dodaj pracownika', command=dodaj_pracownika)
+            button_pracownicy_dodaj_pracownika.grid(row=6, column=0, columnspan=2)
+
+            # ---------------------------------------
+            # ramka pracownicy_szczegoly
+            # ---------------------------------------
+            label_pracownicy_opis_obiektu = Label(ramka_pracownicy_szczegoly, text='Szczegóły pracowników:', font=('Arial', 10))
+            label_pracownicy_imie_szczegoly = Label(ramka_pracownicy_szczegoly, text='Imię')
+            label_pracownicy_imie_szczegoly_wartosc = Label(ramka_pracownicy_szczegoly, text='...', width=20)
+
+            label_pracownicy_nazwisko_szczegoly = Label(ramka_pracownicy_szczegoly, text='Nazwisko')
+            label_pracownicy_nazwisko_szczegoly_wartosc = Label(ramka_pracownicy_szczegoly, text='...', width=20)
+
+            label_pracownicy_zamieszkanie_szczegoly = Label(ramka_pracownicy_szczegoly, text='Zamieszkały/a')
+            label_pracownicy_zamieszkanie_szczegoly_wartosc = Label(ramka_pracownicy_szczegoly, text='...', width=20)
+
+            label_pracownicy_zlobek_szczegoly = Label(ramka_pracownicy_szczegoly, text='Przynależność')
+            label_pracownicy_zlobek_szczegoly_wartosc = Label(ramka_pracownicy_szczegoly, text='...', width=20)
+
+            label_pracownicy_opis_obiektu.grid(row=0, column=0, columnspan=5, pady=10)
+
+            label_pracownicy_imie_szczegoly.grid(row=1, column=0)
+            label_pracownicy_imie_szczegoly_wartosc.grid(row=2, column=0)
+
+            label_pracownicy_nazwisko_szczegoly.grid(row=1, column=1)
+            label_pracownicy_nazwisko_szczegoly_wartosc.grid(row=2, column=1)
+
+            label_pracownicy_zamieszkanie_szczegoly.grid(row=1, column=2)
+            label_pracownicy_zamieszkanie_szczegoly_wartosc.grid(row=2, column=2)
+
+            label_pracownicy_zlobek_szczegoly.grid(row=1, column=3)
+            label_pracownicy_zlobek_szczegoly_wartosc.grid(row=2, column=3)
+
+            root_pracownicy.mainloop()
+        
+
+
+
         def center_widgets_choice(event=None):
             window_width = root_choice.winfo_width()
             frame_height = ramka_wybor.winfo_height()
