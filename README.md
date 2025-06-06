@@ -1,2 +1,2 @@
-# zlobki
+# Ten program stanowi narzędzie zarządzania systemem obsługi żłobków. Pozwala on na dodawanie, przeglądanie, modyfikowanie i usuwanie zarówno żłobków, jak i ich pracowników oraz podopiecznych, czyli dzieci. Dodatkową zaletą systemu jest możliwość wyświetlania na mapie miejsc występowania żłobków oraz miejsc zamieszkania pracowników i dzieci, zarówno w odniesieniu do całości, jak i do konkretnego żłobka. Jest to możliwe dzięki zdefiniowaniu adresu dla każdego z wyżej wymienionych podmiotów.
 
