@@ -753,130 +753,148 @@ def logowanie(event=None):
                 root_mapa.place(x=window_width // 2, y=frame_height/2, anchor='center')
 
             def center_map_zlobki(lista_mapa_z:list): # centruje widok mapy na podstawie listy współrzędnych żłobków
-                lats=[]
-                lons=[]
+                if len(lista_mapa_z) != 0: # jeśli lista ma jakieś obiekty
+                    lats=[]
+                    lons=[]
 
-                for coords in lista_mapa_z:
-                    lats.append(coords[0])
-                    lons.append(coords[1])
+                    for coords in lista_mapa_z:
+                        lats.append(coords[0])
+                        lons.append(coords[1])
 
-                min_lat = min(lat for lat in lats) # zasięgi
-                max_lat = max(lat for lat in lats)
-                min_lon = min(lon for lon in lons)
-                max_lon = max(lon for lon in lons)
+                    min_lat = min(lat for lat in lats) # zasięgi
+                    max_lat = max(lat for lat in lats)
+                    min_lon = min(lon for lon in lons)
+                    max_lon = max(lon for lon in lons)
 
-                center_lat = (float(min_lat) + float(max_lat)) / 2 # średnie współrzędne
-                center_lon = (float(min_lon) + float(max_lon)) / 2
+                    center_lat = (float(min_lat) + float(max_lat)) / 2 # średnie współrzędne
+                    center_lon = (float(min_lon) + float(max_lon)) / 2
 
-                return (center_lat, center_lon)
+                    return (center_lat, center_lon)
+                else: # jak lista pusta to zwróć środek Polski
+                    return (52.18, 19.31)
 
             def extent_zoom_zlobki(lista_mapa_z:list): # określa zoom w zależności od zasięgu na podstawie żłobków
-                lats=[]
-                lons=[]
+                if len(lista_mapa_z) != 0: # jeśli lista ma jakieś obiekty
+                    lats=[]
+                    lons=[]
 
-                for coords in lista_mapa_z:
-                    lats.append(coords[0])
-                    lons.append(coords[1])
+                    for coords in lista_mapa_z:
+                        lats.append(coords[0])
+                        lons.append(coords[1])
 
-                min_lat = min(lat for lat in lats) # zasięgi
-                max_lat = max(lat for lat in lats)
-                min_lon = min(lon for lon in lons)
-                max_lon = max(lon for lon in lons)
+                    min_lat = min(lat for lat in lats) # zasięgi
+                    max_lat = max(lat for lat in lats)
+                    min_lon = min(lon for lon in lons)
+                    max_lon = max(lon for lon in lons)
 
-                extent_width=float(max_lat) - float(min_lat) # średnie współrzędne
-                extent_height=float(max_lon) - float(min_lon)
+                    extent_width=float(max_lat) - float(min_lat) # średnie współrzędne
+                    extent_height=float(max_lon) - float(min_lon)
 
-                extent_width_zoom=math.log(extent_width / 1155) / (-0.716) # wzór znaleziony w internecie do określania optymalnego zasięgu
-                extent_height_zoom=math.log(extent_height / 260) / (-0.69)
+                    extent_width_zoom=math.log(extent_width / 1155) / (-0.716) # wzór znaleziony w internecie do określania optymalnego zasięgu
+                    extent_height_zoom=math.log(extent_height / 260) / (-0.69)
 
-                if extent_height_zoom<extent_width_zoom:
-                    return int(round(extent_height_zoom,0)) # zaokrągla do całości
-                else:
-                    return int(round(extent_width_zoom,0))
+                    if extent_height_zoom<extent_width_zoom:
+                        return int(round(extent_height_zoom,0)) # zaokrągla do całości
+                    else:
+                        return int(round(extent_width_zoom,0))
+                else: # jak lista pusta to zwróć domyślne przybliżenie
+                    return 5
 
             def center_map_pracownicy(lista_mapa_p: list): # centruje mapę pracowników (tak samo jak dla żłobków)
-                lats = []
-                lons = []
+                if len(lista_mapa_p) != 0: # jeśli lista ma jakieś obiekty
+                    lats = []
+                    lons = []
 
-                for coords in lista_mapa_p:
-                    lats.append(coords[0])
-                    lons.append(coords[1])
+                    for coords in lista_mapa_p:
+                        lats.append(coords[0])
+                        lons.append(coords[1])
 
-                min_lat = min(lat for lat in lats)
-                max_lat = max(lat for lat in lats)
-                min_lon = min(lon for lon in lons)
-                max_lon = max(lon for lon in lons)
+                    min_lat = min(lat for lat in lats)
+                    max_lat = max(lat for lat in lats)
+                    min_lon = min(lon for lon in lons)
+                    max_lon = max(lon for lon in lons)
 
-                center_lat = (float(min_lat) + float(max_lat)) / 2
-                center_lon = (float(min_lon) + float(max_lon)) / 2
+                    center_lat = (float(min_lat) + float(max_lat)) / 2
+                    center_lon = (float(min_lon) + float(max_lon)) / 2
 
-                return (center_lat, center_lon)
+                    return (center_lat, center_lon)
+                else: # jak lista pusta to zwróć środek Polski
+                    return (52.18, 19.31)
 
             def extent_zoom_pracownicy(lista_mapa_p: list): # określa zoom mapy dla pracowników (tak samo jak dla żłobków)
-                lats = []
-                lons = []
+                if len(lista_mapa_p) != 0: # jeśli lista ma jakieś obiekty
+                    lats = []
+                    lons = []
 
-                for coords in lista_mapa_p:
-                    lats.append(coords[0])
-                    lons.append(coords[1])
+                    for coords in lista_mapa_p:
+                        lats.append(coords[0])
+                        lons.append(coords[1])
 
-                min_lat = min(lat for lat in lats)
-                max_lat = max(lat for lat in lats)
-                min_lon = min(lon for lon in lons)
-                max_lon = max(lon for lon in lons)
+                    min_lat = min(lat for lat in lats)
+                    max_lat = max(lat for lat in lats)
+                    min_lon = min(lon for lon in lons)
+                    max_lon = max(lon for lon in lons)
 
-                extent_width = float(max_lat) - float(min_lat)
-                extent_height = float(max_lon) - float(min_lon)
+                    extent_width = float(max_lat) - float(min_lat)
+                    extent_height = float(max_lon) - float(min_lon)
 
-                extent_width_zoom = math.log(extent_width / 1155) / (-0.716)
-                extent_height_zoom = math.log(extent_height / 260) / (-0.69)
+                    extent_width_zoom = math.log(extent_width / 1155) / (-0.716)
+                    extent_height_zoom = math.log(extent_height / 260) / (-0.69)
 
-                if extent_height_zoom < extent_width_zoom:
-                    return int(round(extent_height_zoom, 0))
-                else:
-                    return int(round(extent_width_zoom, 0))
+                    if extent_height_zoom < extent_width_zoom:
+                        return int(round(extent_height_zoom, 0))
+                    else:
+                        return int(round(extent_width_zoom, 0))
+                else: # jak lista pusta to zwróć domyślne przybliżenie
+                    return 5
                 
             def center_map_dzieci(lista_mapa_d: list): # centruje mapę dla dzieci (tak samo jak dla żłobków)
-                lats = []
-                lons = []
+                if len(lista_mapa_d) != 0: # jeśli lista ma jakieś obiekty
+                    lats = []
+                    lons = []
 
-                for coords in lista_mapa_d:
-                    lats.append(coords[0])
-                    lons.append(coords[1])
+                    for coords in lista_mapa_d:
+                        lats.append(coords[0])
+                        lons.append(coords[1])
 
-                min_lat = min(lat for lat in lats)
-                max_lat = max(lat for lat in lats)
-                min_lon = min(lon for lon in lons)
-                max_lon = max(lon for lon in lons)
+                    min_lat = min(lat for lat in lats)
+                    max_lat = max(lat for lat in lats)
+                    min_lon = min(lon for lon in lons)
+                    max_lon = max(lon for lon in lons)
 
-                center_lat = (float(min_lat) + float(max_lat)) / 2
-                center_lon = (float(min_lon) + float(max_lon)) / 2
+                    center_lat = (float(min_lat) + float(max_lat)) / 2
+                    center_lon = (float(min_lon) + float(max_lon)) / 2
 
-                return (center_lat, center_lon)
+                    return (center_lat, center_lon)
+                else: # jak lista pusta to zwróć środek Polski
+                    return (52.18, 19.31)
 
             def extent_zoom_dzieci(lista_mapa_d: list): # określa zoom mapy dla dzieci (tak samo jak dla żłobków)
-                lats = []
-                lons = []
+                if len(lista_mapa_d) != 0: # jeśli lista ma jakieś obiekty
+                    lats = []
+                    lons = []
 
-                for coords in lista_mapa_d:
-                    lats.append(coords[0])
-                    lons.append(coords[1])
+                    for coords in lista_mapa_d:
+                        lats.append(coords[0])
+                        lons.append(coords[1])
 
-                min_lat = min(lat for lat in lats)
-                max_lat = max(lat for lat in lats)
-                min_lon = min(lon for lon in lons)
-                max_lon = max(lon for lon in lons)
+                    min_lat = min(lat for lat in lats)
+                    max_lat = max(lat for lat in lats)
+                    min_lon = min(lon for lon in lons)
+                    max_lon = max(lon for lon in lons)
 
-                extent_width = float(max_lat) - float(min_lat)
-                extent_height = float(max_lon) - float(min_lon)
+                    extent_width = float(max_lat) - float(min_lat)
+                    extent_height = float(max_lon) - float(min_lon)
 
-                extent_width_zoom = math.log(extent_width / 1155) / (-0.716)
-                extent_height_zoom = math.log(extent_height / 260) / (-0.69)
+                    extent_width_zoom = math.log(extent_width / 1155) / (-0.716)
+                    extent_height_zoom = math.log(extent_height / 260) / (-0.69)
 
-                if extent_height_zoom < extent_width_zoom:
-                    return int(round(extent_height_zoom, 0))
-                else:
-                    return int(round(extent_width_zoom, 0))
+                    if extent_height_zoom < extent_width_zoom:
+                        return int(round(extent_height_zoom, 0))
+                    else:
+                        return int(round(extent_width_zoom, 0))
+                else: # jak lista pusta to zwróć domyślne przybliżenie
+                    return 5
 
             def mapa_zlobki(): # funkcja mapy dla żłobków
                 coords_for_map=[]
