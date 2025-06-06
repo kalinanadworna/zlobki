@@ -89,7 +89,7 @@ def logowanie(event=None):
                 zlobki_list[i].name=nazwa # zmienia wartości cech obiektu w danej klasie
                 zlobki_list[i].location=miejsce
 
-                button_zlobki_dodaj_zlobek.config(text='Dodaj zlobek', command=dodaj_zlobek) # dodaje nowy obiekt (zmieniony)
+                button_zlobki_dodaj_zlobek.config(text='Dodaj żłobek', command=dodaj_zlobek) # dodaje nowy obiekt (zmieniony)
 
                 entry_zlobki_nazwa.delete(0, END)
                 entry_zlobki_miejsce.delete(0, END)
@@ -111,10 +111,10 @@ def logowanie(event=None):
                 dzieci=zlobki_list[i].children
                 miejsce=zlobki_list[i].location
 
-                label_zlobki_nazwa_szczegoly_wartosc.config(text=nazwa) # zmiana tekstu w miejscu pokazywania na wartości zmiennych
-                label_zlobki_miejsce_szczegoly_wartosc.config(text=miejsce)
-                label_zlobki_dzieci_szczegoly_wartosc.config(text=dzieci)
-                label_zlobki_pracownicy_szczegoly_wartosc.config(text=pracownicy)
+                label_zlobki_nazwa_szczegoly_wartosc.config(text=nazwa, bg='pink') # zmiana tekstu w miejscu pokazywania na wartości zmiennych
+                label_zlobki_miejsce_szczegoly_wartosc.config(text=miejsce, bg='pink')
+                label_zlobki_dzieci_szczegoly_wartosc.config(text=dzieci, bg='pink')
+                label_zlobki_pracownicy_szczegoly_wartosc.config(text=pracownicy, bg='pink')
 
             root_zlobki_all = Toplevel(root_choice) # okienko podrzędne do okienka wyboru
             root_zlobki_all.title('System żłobków')
@@ -132,15 +132,15 @@ def logowanie(event=None):
             ramka_zlobki_szczegoly = Frame(root_zlobki)
 
             ramka_zlobki_start.grid(row=0, column=0, columnspan=2) # pozycje ramek
-            ramka_zlobki_lista.grid(row=1, column=0)
-            ramka_zlobki_formularz.grid(row=1, column=1)
+            ramka_zlobki_lista.grid(row=1, column=1)
+            ramka_zlobki_formularz.grid(row=1, column=0)
             ramka_zlobki_szczegoly.grid(row=2, column=0, columnspan=2)
 
             # ---------------------------------------
             # ramka zlobki_start
             # ---------------------------------------
-            label_zlobki_lista = Label(ramka_zlobki_start, text='Lista żłobków', font=('Arial', 12, 'bold'))
-            button_pokaz_liste = Button(ramka_zlobki_start, text='Pokaż wszystko', command=pokaz_wszystko_zlobek) # przycisk wykonujący pokazywanie wszystkiego
+            label_zlobki_lista = Label(ramka_zlobki_start, text='Lista żłobków', font=('Arial', 14, 'bold italic'), fg='green')
+            button_pokaz_liste = Button(ramka_zlobki_start, text='Pokaż wszystko', font=('Arial', 9, 'bold'), command=pokaz_wszystko_zlobek) # przycisk wykonujący pokazywanie wszystkiego
 
             label_zlobki_lista.grid(row=0, column=0, padx=(szer / 2 - label_zlobki_lista.winfo_reqwidth() / 2), pady=(10, 0)) # umieszczenie przycisku na środku
             button_pokaz_liste.grid(row=1, column=0)
@@ -161,7 +161,7 @@ def logowanie(event=None):
             # ---------------------------------------
             # ramka zlobki_formularz
             # ---------------------------------------
-            label_zlobki_nowy_obiekt = Label(ramka_zlobki_formularz, text='Formularz edycji i dodawania:', font=('Arial', 10))
+            label_zlobki_nowy_obiekt = Label(ramka_zlobki_formularz, text='Formularz edycji i dodawania:', font=('Arial', 10, 'italic'), bg='yellow')
 
             label_zlobki_nazwa = Label(ramka_zlobki_formularz, text='Nazwa żłobka')
             label_zlobki_miejsce = Label(ramka_zlobki_formularz, text='Adres żłobka')
@@ -176,23 +176,23 @@ def logowanie(event=None):
             entry_zlobki_nazwa.grid(row=1, column=1, sticky=W)
             entry_zlobki_miejsce.grid(row=2, column=1, sticky=W)
 
-            button_zlobki_dodaj_zlobek = Button(ramka_zlobki_formularz, text='Dodaj żłobek', command=dodaj_zlobek)
+            button_zlobki_dodaj_zlobek = Button(ramka_zlobki_formularz, text='Dodaj żłobek', font=('Arial', 8, 'bold'), fg='red', command=dodaj_zlobek)
             button_zlobki_dodaj_zlobek.grid(row=3, column=0, columnspan=2)
 
             # ---------------------------------------
             # ramka zlobki_szczegoly
             # ---------------------------------------
-            label_zlobki_opis_obiektu = Label(ramka_zlobki_szczegoly, text='Szczegóły zlobeku:', font=('Arial', 10))
-            label_zlobki_nazwa_szczegoly = Label(ramka_zlobki_szczegoly, text='Nazwa żłobka')
+            label_zlobki_opis_obiektu = Label(ramka_zlobki_szczegoly, text='Szczegóły żłobka:', font=('Arial', 10, 'bold'))
+            label_zlobki_nazwa_szczegoly = Label(ramka_zlobki_szczegoly, text='Nazwa żłobka', font=('Arial', 10, 'italic'))
             label_zlobki_nazwa_szczegoly_wartosc = Label(ramka_zlobki_szczegoly, text='...', width=20) # te trzy kropki są później zamieniane na poszczególne wartości cech obiektów
 
-            label_zlobki_miejsce_szczegoly = Label(ramka_zlobki_szczegoly, text='Adres żłobka')
+            label_zlobki_miejsce_szczegoly = Label(ramka_zlobki_szczegoly, text='Adres żłobka', font=('Arial', 10, 'italic'))
             label_zlobki_miejsce_szczegoly_wartosc = Label(ramka_zlobki_szczegoly, text='...', width=20)
 
-            label_zlobki_dzieci_szczegoly = Label(ramka_zlobki_szczegoly, text='Liczba podopiecznych')
+            label_zlobki_dzieci_szczegoly = Label(ramka_zlobki_szczegoly, text='Liczba podopiecznych', font=('Arial', 10, 'italic'))
             label_zlobki_dzieci_szczegoly_wartosc = Label(ramka_zlobki_szczegoly, text='...', width=20)
 
-            label_zlobki_pracownicy_szczegoly = Label(ramka_zlobki_szczegoly, text='Liczba pracowników')
+            label_zlobki_pracownicy_szczegoly = Label(ramka_zlobki_szczegoly, text='Liczba pracowników', font=('Arial', 10, 'italic'))
             label_zlobki_pracownicy_szczegoly_wartosc = Label(ramka_zlobki_szczegoly, text='...', width=20)
 
             label_zlobki_opis_obiektu.grid(row=0, column=0, columnspan=8, pady=10)
@@ -380,8 +380,8 @@ def logowanie(event=None):
             ramka_pracownicy_szczegoly = Frame(root_pracownicy)
 
             ramka_pracownicy_start.grid(row=0, column=0, columnspan=2)
-            ramka_pracownicy_lista.grid(row=1, column=0)
-            ramka_pracownicy_formularz.grid(row=1, column=1)
+            ramka_pracownicy_lista.grid(row=1, column=1)
+            ramka_pracownicy_formularz.grid(row=1, column=0)
             ramka_pracownicy_szczegoly.grid(row=2, column=0, columnspan=2)
 
             # ---------------------------------------
@@ -646,8 +646,8 @@ def logowanie(event=None):
             ramka_dzieci_szczegoly = Frame(root_dzieci)
 
             ramka_dzieci_start.grid(row=0, column=0, columnspan=2)
-            ramka_dzieci_lista.grid(row=1, column=0)
-            ramka_dzieci_formularz.grid(row=1, column=1)
+            ramka_dzieci_lista.grid(row=1, column=1)
+            ramka_dzieci_formularz.grid(row=1, column=0)
             ramka_dzieci_szczegoly.grid(row=2, column=0, columnspan=2)
 
             # ---------------------------------------
