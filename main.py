@@ -359,10 +359,10 @@ def logowanie(event=None):
                     zamieszkanie=show_list[i].location
                     zlobek=show_list[i].nursery
 
-                label_pracownicy_imie_szczegoly_wartosc.config(text=imie) # zamienia tekst na wartości cech pracownika
-                label_pracownicy_nazwisko_szczegoly_wartosc.config(text=nazwisko)
-                label_pracownicy_zamieszkanie_szczegoly_wartosc.config(text=zamieszkanie)
-                label_pracownicy_zlobek_szczegoly_wartosc.config(text=zlobek)
+                label_pracownicy_imie_szczegoly_wartosc.config(text=imie, bg='deepskyblue') # zamienia tekst na wartości cech pracownika
+                label_pracownicy_nazwisko_szczegoly_wartosc.config(text=nazwisko, bg='deepskyblue')
+                label_pracownicy_zamieszkanie_szczegoly_wartosc.config(text=zamieszkanie, bg='deepskyblue')
+                label_pracownicy_zlobek_szczegoly_wartosc.config(text=zlobek, bg='deepskyblue')
 
             root_pracownicy_all = Toplevel(root_choice) # okno podrzędne do okna wyboru
             root_pracownicy_all.title('System żłobków')
@@ -387,9 +387,9 @@ def logowanie(event=None):
             # ---------------------------------------
             # ramka pracownicy_start
             # ---------------------------------------
-            label_pracownicy_lista = Label(ramka_pracownicy_start, text='Lista pracowników żłobków', font=('Arial', 12, 'bold'))
-            button_pracownicy_pokaz_liste = Button(ramka_pracownicy_start, text='Pokaż wszystko', command=pokaz_wszystko_pracownicy)
-            label_pracownicy_wybor = Label(ramka_pracownicy_start, text='Wybierz formułę wyświetlania pracowników')
+            label_pracownicy_lista = Label(ramka_pracownicy_start, text='Lista pracowników żłobków', font=('Arial', 14, 'bold italic'), fg='blue')
+            button_pracownicy_pokaz_liste = Button(ramka_pracownicy_start, text='Pokaż wszystko', font=('Arial', 9, 'bold'), command=pokaz_wszystko_pracownicy)
+            label_pracownicy_wybor = Label(ramka_pracownicy_start, text='Wybierz formułę wyświetlania pracowników', bg='cyan')
             var = IntVar() # inicjalizacja radiobuttona, czyli tego przełącznika
             radiobutton_all = Radiobutton(ramka_pracownicy_start, text='Wszyscy pracownicy', variable=var, value=1) # opcja 1 radiobuttona z opisem
             radiobutton_some = Radiobutton(ramka_pracownicy_start, text='Pracownicy z danego żłobka (nazwa)', variable=var, value=2) # opcja 2 radiobuttona z opisem
@@ -420,7 +420,7 @@ def logowanie(event=None):
             # ---------------------------------------
             # ramka pracownicy_formularz
             # ---------------------------------------
-            label_pracownicy_nowy_obiekt = Label(ramka_pracownicy_formularz, text='Formularz edycji i dodawania:', font=('Arial', 10))
+            label_pracownicy_nowy_obiekt = Label(ramka_pracownicy_formularz, text='Formularz edycji i dodawania:', font=('Arial', 10, 'italic'), bg='yellow')
             label_pracownicy_imie = Label(ramka_pracownicy_formularz, text='Imię')
             label_pracownicy_nazwisko = Label(ramka_pracownicy_formularz, text='Nazwisko')
             label_pracownicy_zamieszkanie = Label(ramka_pracownicy_formularz, text='Zamieszkały/a')
@@ -442,23 +442,23 @@ def logowanie(event=None):
             entry_pracownicy_zamieszkanie.grid(row=3, column=1, sticky=W)
             entry_pracownicy_zlobek.grid(row=4, column=1, sticky=W)
 
-            button_pracownicy_dodaj_pracownika = Button(ramka_pracownicy_formularz, text='Dodaj pracownika', command=dodaj_pracownika)
+            button_pracownicy_dodaj_pracownika = Button(ramka_pracownicy_formularz, text='Dodaj pracownika', font=('Arial', 8, 'bold'), fg='red', command=dodaj_pracownika)
             button_pracownicy_dodaj_pracownika.grid(row=6, column=0, columnspan=2)
 
             # ---------------------------------------
             # ramka pracownicy_szczegoly
             # ---------------------------------------
-            label_pracownicy_opis_obiektu = Label(ramka_pracownicy_szczegoly, text='Szczegóły pracowników:', font=('Arial', 10))
-            label_pracownicy_imie_szczegoly = Label(ramka_pracownicy_szczegoly, text='Imię')
+            label_pracownicy_opis_obiektu = Label(ramka_pracownicy_szczegoly, text='Szczegóły pracowników:', font=('Arial', 10, 'bold'))
+            label_pracownicy_imie_szczegoly = Label(ramka_pracownicy_szczegoly, text='Imię', font=('Arial', 10, 'italic'))
             label_pracownicy_imie_szczegoly_wartosc = Label(ramka_pracownicy_szczegoly, text='...', width=20) # trzy kropki będą zmieniane przez cechy danego pracownika
 
-            label_pracownicy_nazwisko_szczegoly = Label(ramka_pracownicy_szczegoly, text='Nazwisko')
+            label_pracownicy_nazwisko_szczegoly = Label(ramka_pracownicy_szczegoly, text='Nazwisko', font=('Arial', 10, 'italic'))
             label_pracownicy_nazwisko_szczegoly_wartosc = Label(ramka_pracownicy_szczegoly, text='...', width=20)
 
-            label_pracownicy_zamieszkanie_szczegoly = Label(ramka_pracownicy_szczegoly, text='Zamieszkały/a')
+            label_pracownicy_zamieszkanie_szczegoly = Label(ramka_pracownicy_szczegoly, text='Zamieszkały/a', font=('Arial', 10, 'italic'))
             label_pracownicy_zamieszkanie_szczegoly_wartosc = Label(ramka_pracownicy_szczegoly, text='...', width=20)
 
-            label_pracownicy_zlobek_szczegoly = Label(ramka_pracownicy_szczegoly, text='Przynależność')
+            label_pracownicy_zlobek_szczegoly = Label(ramka_pracownicy_szczegoly, text='Przynależność', font=('Arial', 10, 'italic'))
             label_pracownicy_zlobek_szczegoly_wartosc = Label(ramka_pracownicy_szczegoly, text='...', width=20)
 
             label_pracownicy_opis_obiektu.grid(row=0, column=0, columnspan=5, pady=10)
@@ -625,10 +625,10 @@ def logowanie(event=None):
                     zamieszkanie=show_list[i].location
                     zlobek=show_list[i].nursery
 
-                label_dzieci_imie_szczegoly_wartosc.config(text=imie)
-                label_dzieci_nazwisko_szczegoly_wartosc.config(text=nazwisko)
-                label_dzieci_zamieszkanie_szczegoly_wartosc.config(text=zamieszkanie)
-                label_dzieci_zlobek_szczegoly_wartosc.config(text=zlobek)
+                label_dzieci_imie_szczegoly_wartosc.config(text=imie, bg='orchid1')
+                label_dzieci_nazwisko_szczegoly_wartosc.config(text=nazwisko, bg='orchid1')
+                label_dzieci_zamieszkanie_szczegoly_wartosc.config(text=zamieszkanie, bg='orchid1')
+                label_dzieci_zlobek_szczegoly_wartosc.config(text=zlobek, bg='orchid1')
 
             root_dzieci_all = Toplevel(root_choice)
             root_dzieci_all.title('System żłobków')
@@ -653,9 +653,9 @@ def logowanie(event=None):
             # ---------------------------------------
             # ramka dzieci_start
             # ---------------------------------------
-            label_dzieci_lista = Label(ramka_dzieci_start, text='Lista dzieci w żłobkach', font=('Arial', 12, 'bold'))
-            button_dzieci_pokaz_liste = Button(ramka_dzieci_start, text='Pokaż wszystko', command=pokaz_wszystko_dzieci)
-            label_dzieci_wybor = Label(ramka_dzieci_start, text='Wybierz formułę wyświetlania dzieci')
+            label_dzieci_lista = Label(ramka_dzieci_start, text='Lista dzieci w żłobkach', font=('Arial', 14, 'bold italic'), fg='red4')
+            button_dzieci_pokaz_liste = Button(ramka_dzieci_start, text='Pokaż wszystko', font=('Arial', 9, 'bold'), command=pokaz_wszystko_dzieci)
+            label_dzieci_wybor = Label(ramka_dzieci_start, text='Wybierz formułę wyświetlania dzieci', bg='cyan')
             var = IntVar()
             radiobutton_all = Radiobutton(ramka_dzieci_start, text='Wszystkie dzieci', variable=var, value=1)
             radiobutton_some = Radiobutton(ramka_dzieci_start, text='Dzieci z danego żłobka (nazwa)', variable=var, value=2)
@@ -686,7 +686,7 @@ def logowanie(event=None):
             # ---------------------------------------
             # ramka dzieci_formularz
             # ---------------------------------------
-            label_dzieci_nowy_obiekt = Label(ramka_dzieci_formularz, text='Formularz edycji i dodawania:', font=('Arial', 10))
+            label_dzieci_nowy_obiekt = Label(ramka_dzieci_formularz, text='Formularz edycji i dodawania:', font=('Arial', 10, 'italic'), bg='yellow')
             label_dzieci_imie = Label(ramka_dzieci_formularz, text='Imię')
             label_dzieci_nazwisko = Label(ramka_dzieci_formularz, text='Nazwisko')
             label_dzieci_zamieszkanie = Label(ramka_dzieci_formularz, text='Zamieszkały/a')
@@ -708,23 +708,23 @@ def logowanie(event=None):
             entry_dzieci_zamieszkanie.grid(row=3, column=1, sticky=W)
             entry_dzieci_zlobek.grid(row=4, column=1, sticky=W)
 
-            button_dzieci_dodaj_dziecko = Button(ramka_dzieci_formularz, text='Dodaj dziecko', command=dodaj_dziecko)
+            button_dzieci_dodaj_dziecko = Button(ramka_dzieci_formularz, text='Dodaj dziecko', font=('Arial', 8, 'bold'), fg='red', command=dodaj_dziecko)
             button_dzieci_dodaj_dziecko.grid(row=6, column=0, columnspan=2)
 
             # ---------------------------------------
             # ramka dzieci_szczegoly
             # ---------------------------------------
-            label_dzieci_opis_obiektu = Label(ramka_dzieci_szczegoly, text='Szczegóły dzieci:', font=('Arial', 10))
-            label_dzieci_imie_szczegoly = Label(ramka_dzieci_szczegoly, text='Imię')
+            label_dzieci_opis_obiektu = Label(ramka_dzieci_szczegoly, text='Szczegóły dzieci:', font=('Arial', 10, 'bold'))
+            label_dzieci_imie_szczegoly = Label(ramka_dzieci_szczegoly, text='Imię', font=('Arial', 10, 'italic'))
             label_dzieci_imie_szczegoly_wartosc = Label(ramka_dzieci_szczegoly, text='...', width=20)
 
-            label_dzieci_nazwisko_szczegoly = Label(ramka_dzieci_szczegoly, text='Nazwisko')
+            label_dzieci_nazwisko_szczegoly = Label(ramka_dzieci_szczegoly, text='Nazwisko', font=('Arial', 10, 'italic'))
             label_dzieci_nazwisko_szczegoly_wartosc = Label(ramka_dzieci_szczegoly, text='...', width=20)
 
-            label_dzieci_zamieszkanie_szczegoly = Label(ramka_dzieci_szczegoly, text='Zamieszkały/a')
+            label_dzieci_zamieszkanie_szczegoly = Label(ramka_dzieci_szczegoly, text='Zamieszkały/a', font=('Arial', 10, 'italic'))
             label_dzieci_zamieszkanie_szczegoly_wartosc = Label(ramka_dzieci_szczegoly, text='...', width=20)
 
-            label_dzieci_zlobek_szczegoly = Label(ramka_dzieci_szczegoly, text='Przynależność')
+            label_dzieci_zlobek_szczegoly = Label(ramka_dzieci_szczegoly, text='Przynależność', font=('Arial', 10, 'italic'))
             label_dzieci_zlobek_szczegoly_wartosc = Label(ramka_dzieci_szczegoly, text='...', width=20)
 
             label_dzieci_opis_obiektu.grid(row=0, column=0, columnspan=5, pady=10)
@@ -983,19 +983,19 @@ def logowanie(event=None):
             # ---------------------------------------
             # ramka mapa
             # ---------------------------------------
-            label_mapa_start = Label(ramka_mapa, text='Portal mapowy', font=('Arial', 12, 'bold')) # poszczególne napisy, pola wprowadzania i przyciski
-            label_mapa_wybor = Label(ramka_mapa, text='Wybierz mapę do wyświetlenia:')
-            label_mapa_zlobki = Label(ramka_mapa, text='Mapa wszystkich żłobków')
+            label_mapa_start = Label(ramka_mapa, text='Portal mapowy', font=('Arial', 14, 'bold italic'), fg='darkgreen') # poszczególne napisy, pola wprowadzania i przyciski
+            label_mapa_wybor = Label(ramka_mapa, text='Wybierz mapę do wyświetlenia:', bg='cyan')
+            label_mapa_zlobki = Label(ramka_mapa, text='Mapa wszystkich żłobków', font=('Arial', 8, 'bold'))
             button_mapa_zlobki = Button(ramka_mapa, text='Wyświetl', command=mapa_zlobki)
-            label_mapa_pracownicy = Label(ramka_mapa, text='Mapa wszystkich pracowników')
+            label_mapa_pracownicy = Label(ramka_mapa, text='Mapa wszystkich pracowników', font=('Arial', 8, 'bold'))
             button_mapa_pracownicy = Button(ramka_mapa, text='Wyświetl', command=mapa_pracowicy)
-            label_mapa_dzieci = Label(ramka_mapa, text='Mapa wszystkich dzieci')
+            label_mapa_dzieci = Label(ramka_mapa, text='Mapa wszystkich dzieci', font=('Arial', 8, 'bold'))
             button_mapa_dzieci = Button(ramka_mapa, text='Wyświetl', command=mapa_dzieci)
-            label_mapa_pracownicy_zlobka = Label(ramka_mapa, text='Mapa pracowników wybranego żłobka')
+            label_mapa_pracownicy_zlobka = Label(ramka_mapa, text='Mapa pracowników wybranego żłobka', font=('Arial', 8, 'bold'))
             label_mapa_zlobek_prac = Label(ramka_mapa, text='Żłobek')
             entry_mapa_zlobek_prac = Entry(ramka_mapa)
             button_mapa_pracownicy_zlobka = Button(ramka_mapa, text='Wyświetl', command=mapa_pracowicy_ze_zlobka)
-            label_mapa_dzieci_zlobka = Label(ramka_mapa, text='Mapa dzieci wybranego żłobka')
+            label_mapa_dzieci_zlobka = Label(ramka_mapa, text='Mapa dzieci wybranego żłobka', font=('Arial', 8, 'bold'))
             label_mapa_zlobek_dziec = Label(ramka_mapa, text='Żłobek')
             entry_mapa_zlobek_dziec = Entry(ramka_mapa)
             button_mapa_dzieci_zlobka = Button(ramka_mapa, text='Wyświetl', command=mapa_dzieci_ze_zlobka)
@@ -1030,18 +1030,18 @@ def logowanie(event=None):
 
         root_choice=Toplevel() # okienko wyboru funkcjonalności
         root_choice.title('Wybór funkcjonalności')
-        root_choice.geometry('270x130')
+        root_choice.geometry('290x130')
 
         root_choice.bind('<Configure>', center_widgets_choice) # centrowanie widżetów okna wyboru
 
         ramka_wybor=Frame(root_choice) # główna ramka
         ramka_wybor.grid(row=0, column=0)
 
-        label_wybor_opcje=Label(ramka_wybor,text='Wybierz funkcjonalność do uruchomienia') # napisy i przyciski okna wyboru
-        label_wybor_zlobki=Label(ramka_wybor, text='Lista żłobków')
-        label_wybor_pracownicy=Label(ramka_wybor, text='Lista pracowników żłobków')
-        label_wybor_dzieci=Label(ramka_wybor, text='Lista podopiecznych żłobków')
-        label_wybor_mapa=Label(ramka_wybor, text='Portal mapowy')
+        label_wybor_opcje=Label(ramka_wybor,text='Wybierz funkcjonalność do uruchomienia', font=('Arial', 10, 'bold')) # napisy i przyciski okna wyboru
+        label_wybor_zlobki=Label(ramka_wybor, text='Lista żłobków', font=('Arial', 9, 'italic'))
+        label_wybor_pracownicy=Label(ramka_wybor, text='Lista pracowników żłobków', font=('Arial', 9, 'italic'))
+        label_wybor_dzieci=Label(ramka_wybor, text='Lista podopiecznych żłobków', font=('Arial', 9, 'italic'))
+        label_wybor_mapa=Label(ramka_wybor, text='Portal mapowy', font=('Arial', 9, 'italic'))
         button_wybor_remonty=Button(ramka_wybor,text='Wybierz', command=zlobki)
         button_wybor_pracownicy=Button(ramka_wybor,text='Wybierz', command=pracownicy)
         button_wybor_dzieci=Button(ramka_wybor,text='Wybierz', command=dzieci)
@@ -1060,7 +1060,7 @@ def logowanie(event=None):
         root_choice.mainloop() # okienko w pętli żeby się nie zamykało
 
     else:
-        wrong_label=Label(ramka_logowanie,text='Błędne hasło, spróbuj jeszcze raz') # jeśli hasło jest błędne
+        wrong_label=Label(ramka_logowanie,text='Błędne hasło, spróbuj jeszcze raz', font=('Arial', 8), fg='red') # jeśli hasło jest błędne
         wrong_label.grid(row=2, column=0, columnspan=2, padx=3)
         logowanie_entry.delete(0, END) # czyści okeienko wprowadzania
         logowanie_entry.focus() # wprowadza kursor do pola wprowadzania
@@ -1084,7 +1084,7 @@ ramka_logowanie.grid(row=0, column=0)
 logowanie_napis=Label(ramka_logowanie, text='Podaj hasło dostępu') # napis, okienko wprowadzania i przycisk
 logowanie_entry=Entry(ramka_logowanie, width=20, show='•') # show powoduje że hasło jest zakryte
 logowanie_entry.bind('<Return>', logowanie) # pozwala na zatwierdzanie przez wciśnięcie Enter na klawiaturze
-logowanie_button=Button(ramka_logowanie, text='Enter', command=logowanie)
+logowanie_button=Button(ramka_logowanie, text='Enter', font=('Arial', 8, 'bold'), command=logowanie)
 
 logowanie_napis.grid(row=0, column=0, columnspan=2)
 logowanie_entry.grid(row=1, column=0, padx=(3,0))
