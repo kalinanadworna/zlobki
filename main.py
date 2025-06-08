@@ -14,14 +14,14 @@ def coords_func(address): # funkcja za parametr przyjmuje wprowadzony adres (np.
     long = data[0]["lon"]
     return [float(lat), float(long)] # zwraca długość i szerokość geograficzną
 
-# Klasy reprezentujące żłobki, pracowników i dzieci
+# Klasy reprezentują hce żłobki, pracowników i dzieci
 zlobki_list=[] # deklaracja listy do zapisu obiektów reprezentowanych przez klasy (działa jak baza danych)
 class Nursery:
     def __init__(self, name, location, workers:int=0, children:int=0): # deklaracja cech które musi posiadać klasa, pracownicy i dzieci początkowo 0
         self.name = name
         self.location = location
-        self.workers = sum(pracownicy_list) # suma pracowników w danej placówce
-        self.children = sum(dzieci_list) # suma dzieci w danej placówce
+        self.workers = len(pracownicy_list) # suma pracowników w danej placówce
+        self.children = len(dzieci_list) # suma dzieci w danej placówce
         self.coordinates = coords_func(location) # współrzędne na podstawie adresu
 
 pracownicy_list=[]
@@ -103,18 +103,27 @@ def logowanie(event=None):
 
                 pokaz_wszystko_zlobek()
 
-            def pokaz_zlobek(): # pokazuje pełne informacje o zaznaczonym żłobku
+            def pokaz_zlobek():  # pokazuje pełne informacje o zaznaczonym żłobku
                 i = listbox_zlobki.index(ACTIVE)
 
-                nazwa=zlobki_list[i].name # poszczególne cechy obiektu do zmiennych
-                pracownicy=zlobki_list[i].workers
-                dzieci=zlobki_list[i].children
-                miejsce=zlobki_list[i].location
+                nazwa = zlobki_list[i].name  # poszczególne cechy obiektu do zmiennych
+                miejsce = zlobki_list[i].location
 
-                label_zlobki_nazwa_szczegoly_wartosc.config(text=nazwa, bg='pink') # zmiana tekstu w miejscu pokazywania na wartości zmiennych
+                dzieci = []
+                for dziecko in dzieci_list:
+                    if dziecko.nursery == nazwa:
+                        dzieci.append(dziecko)
+
+                pracownicy = []
+                for pracownik in pracownicy_list:
+                    if pracownik.nursery == nazwa:
+                        pracownicy.append(pracownik)
+
+                label_zlobki_nazwa_szczegoly_wartosc.config(text=nazwa, bg='pink')  # zmiana tekstu w miejscu pokazywania na wartości zmiennych
+
                 label_zlobki_miejsce_szczegoly_wartosc.config(text=miejsce, bg='pink')
-                label_zlobki_dzieci_szczegoly_wartosc.config(text=dzieci, bg='pink')
-                label_zlobki_pracownicy_szczegoly_wartosc.config(text=pracownicy, bg='pink')
+                label_zlobki_dzieci_szczegoly_wartosc.config(text=len(dzieci), bg='pink')
+                label_zlobki_pracownicy_szczegoly_wartosc.config(text=len(pracownicy), bg='pink')
 
             root_zlobki_all = Toplevel(root_choice) # okienko podrzędne do okienka wyboru
             root_zlobki_all.title('System żłobków')
